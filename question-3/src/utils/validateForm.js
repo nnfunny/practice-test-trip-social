@@ -1,3 +1,5 @@
+import covertToCapitalizedCase from "./convertToCaptializedCase";
+
 export default function validateForm(submittedForm) {
   if (submittedForm === undefined || Object.keys(submittedForm).length === 0) {
     alert("Please fill out the form");
@@ -6,7 +8,7 @@ export default function validateForm(submittedForm) {
 
   for (let [key, value] of Object.entries(submittedForm)) {
     if (value === "" || value === null || value === undefined) {
-      alert(`${key} is empty`);
+      alert(`${covertToCapitalizedCase(key)} is empty`);
       return;
     }
 
