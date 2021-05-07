@@ -17,7 +17,7 @@ function App() {
   };
 
   return (
-    <>
+    <div className="container">
       {config && (
         <form className="App" onSubmit={handleSubmit}>
           {config.questions.map((question) => {
@@ -27,7 +27,7 @@ function App() {
           <button>Submit</button>
         </form>
       )}
-    </>
+    </div>
   );
 }
 
