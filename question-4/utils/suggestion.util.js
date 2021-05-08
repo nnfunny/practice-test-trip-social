@@ -50,9 +50,14 @@ function extractLocations(tsvFile) {
     let rows = data.split(/\n/g);
     rows.forEach(row => {
       let location = row.split(/\t/g);
-      let name = location[1];
+      let city = location[1] ? location[1] : "";
+      let admin1 = location[7] ? `${location[10]}` : "";
+      let country = location[8] ? `${location[8]}` : "";
+      country = country === "US" ? "USA" : "Canada";
+      let name = `${city}, ${admin1}, ${country}`;
       let latitude = +location[4];
       let longitude = +location[5];
+
 
       if (name && latitude && longitude) {
         location = { name, latitude, longitude }
