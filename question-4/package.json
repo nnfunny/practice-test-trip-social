@@ -1,0 +1,25 @@
+{
+  "name": "coding-challenge-backend-c",
+  "version": "0.0.0",
+  "description": "coding challenge in Nodejs",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "./node_modules/mocha/bin/mocha ./test/",
+    "docs": "api -i routes -o docs",
+    "docker": "docker-compose -f docker-compose.yml up -d --build"
+  },
+  "author": "",
+  "license": "WTFPL",
+  "dependencies": {
+    "chai": "^1.9.1",
+    "express": "^4.17.1",
+    "mocha": "^1.18.2",
+    "nodemon": "^2.0.7",
+    "supertest": "^0.11.0"
+  },
+  "devDependencies": {
+    "apidoc": "^0.27.1"
+  }
+}
