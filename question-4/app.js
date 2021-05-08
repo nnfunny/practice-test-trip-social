@@ -7,6 +7,6 @@ app.use(routes);
 
 app.use(express.static('data'))
 
-app.listen(port, () => {
-  console.log(`App listening at http://localhost:${port}`);
+app.listen(port, function ()  {
+  console.log("App listening at http://localhost:" + port);
 });

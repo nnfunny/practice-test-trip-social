@@ -1,4 +1,10 @@
-const { extractLocations } = require("../utils/suggestion.util");
+const {
+  extractLocations,
+  calculateLocationScore,
+  calculateLocationScore2,
+  matchWithName,
+  sortInDescendingOrder,
+} = require("../utils/suggestion.util");
 const path = require("path");
 
 // const suggestions = {
@@ -36,6 +42,26 @@ const path = require("path");
 exports.get = (req, res) => {
   const tsvFile = path.join(__dirname, "../data/cities_canada-usa.tsv");
   const locations = extractLocations(tsvFile);
+  let suggestions = [];
+  let { q, latitude, longitude } = req.query;
 
-  res.json(locations);
+  latitude = latitude ? latitude : 0;
+  longitude = longitude ? longitude : 0;
+
+  locations.forEach((location) => {
+    const score1 = calculateLocationScore(location, latitude, longitude);
+    const score2 = calculateLocationScore2(location, latitude, longitude);
+    let score = (score1 + score2) / 2;
+    score = +score.toFixed(1);
+    const name = location.name;
+
+    if (score !== 0.0 && matchWithName(q, name)) {
+      let suggestion = { ...location, score };
+      suggestions.push(suggestion);
+    }
+  });
+
+  suggestions.sort(sortInDescendingOrder);
+
+  res.json({ suggestions });
 };

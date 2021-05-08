@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { MAX_DISTANCE } = require('./constants');
 
 /**
  * Haversine formula: 	
@@ -24,21 +25,30 @@ function calculateDistanceFormLatLonInKm(lat1, lon1, lat2, lon2) {
 }
 
 function convertToRad(deg) {
-  return deg * (Maht.PI / 180);
+  return deg * (Math.PI / 180);
 }
 
 function calculateLocationScore(location, lat, lon) {
-  const MAX_DISTANCE = 100;
   const distanceInKm = calculateDistanceFormLatLonInKm(
     location.latitude,
     location.longitude,
     lat,
     lon,
   );
-  let score = 100 - distanceInKm;
+  let score = MAX_DISTANCE - distanceInKm;
 
-  score = score > 0 ? Math.round(score) / 100 : 0;
-  score = score.toFixed(1);
+  score = score > 0 ? Math.round(score) / MAX_DISTANCE : 0;
+  score = +score.toFixed(1);
+
+  return score;
+}
+
+function calculateLocationScore2(location, latitude, longitude) {
+  const lat = Math.abs(location.latitude - latitude);
+  const long = Math.abs(location.longitude - longitude);
+  let score = 10 - (lat + long) / 2;
+  score = score > 0 ? Math.round(score) / 10 : 0;
+  return score;
 }
 
 function extractLocations(tsvFile) {
@@ -71,8 +81,21 @@ function extractLocations(tsvFile) {
   return locations;
 }
 
+function matchWithName(keyword, name) {
+  let rgx = new RegExp(keyword, "gi");
+
+  return rgx.test(name);
+}
+
+function sortInDescendingOrder(suggestion1, suggestion2) {
+  return suggestion2.score - suggestion1.score;
+}
+
 module.exports = {
   calculateDistanceFormLatLonInKm,
   calculateLocationScore,
+  calculateLocationScore2,
   extractLocations,
+  matchWithName,
+  sortInDescendingOrder,
 };
