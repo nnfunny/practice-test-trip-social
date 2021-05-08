@@ -11,19 +11,29 @@ const Dropdown = ({ label, name, options }) => {
   };
 
   return (
-    <div>
-      <label htmlFor={name}>{label}</label>
-      <select id={name} defaultValue="" onChange={handleChange}>
-        <option value="" disabled hidden>
-          Choose here
-        </option>
-        {options.map((option) => (
-          <option value={option} key={option}>
-            {option}
+    <>
+      <div className="mb-2 col-md-8">
+        <label className="form-label" htmlFor={name}>
+          {label}
+        </label>
+        <select
+          className="form-select"
+          id={name}
+          defaultValue=""
+          onChange={handleChange}
+          required
+        >
+          <option value="" disabled hidden>
+            Choose here..
           </option>
-        ))}
-      </select>
-    </div>
+          {options.map((option) => (
+            <option value={option} key={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+      </div>
+    </>
   );
 };
 

@@ -4,9 +4,9 @@ import TextInput from "./TextInput";
 
 const Question = ({ title, fields }) => {
   return (
-    <div>
+    <div className="mb-4">
       <h2>{title}</h2>
-      <div>
+      <div className="row g-2">
         {fields.map((field) => {
           if (field.type === TEXT_INPUT) {
             const { name, label } = field;
