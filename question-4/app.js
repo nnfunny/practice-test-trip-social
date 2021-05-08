@@ -5,6 +5,8 @@ const routes = require("./routes");
 
 app.use(routes);
 
+app.use(express.static('data'))
+
 app.listen(port, () => {
   console.log(`App listening at http://localhost:${port}`);
 });
