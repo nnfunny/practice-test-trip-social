@@ -1,7 +1,7 @@
-const express = require("express");
-const suggestionRoutes = require("./suggestion.route");
+var express = require("express");
+var suggestionRoutes = require("./suggestion.route");
 
-const router = express.Router();
+var router = express.Router();
 
 router.use("/docs", express.static("docs"));
 

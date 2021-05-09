@@ -1,11 +1,10 @@
 var suggestionUtil = require("../utils/suggestion.util"),
   extractLocations = suggestionUtil.extractLocations,
-  calculateLocationScore = suggestionUtil.calculateLocationScore,
-  calculateLocationScore2 = suggestionUtil.calculateLocationScore2,
-  matchWithName = suggestionUtil.matchWithName,
+  chooseSuggestion = suggestionUtil.chooseSuggestion,
   sortInDescendingOrder = suggestionUtil.sortInDescendingOrder;
-
+var httpStatus = require("http-status");
 var path = require("path");
+var suggestionValidation = require("../validations/suggestion.validation");
 
 /**
  * Get suggestions for large cities
@@ -16,27 +15,30 @@ exports.get = function (req, res) {
   var locations = extractLocations(tsvFile);
   var suggestions = [];
   var query = req.query,
-      q = query.q,
-      latitude = query.latitude,
-      longitude = query.longitude;
-  latitude = latitude ? latitude : 0;
-  longitude = longitude ? longitude : 0;
+    q = query.q,
+    latitude = query.latitude,
+    longitude = query.longitude;
+  var validQuery = suggestionValidation.validateQuery(q, latitude, longitude);
 
-  locations.forEach(function (location) {
-    var score1 = calculateLocationScore(location, latitude, longitude);
-    var score2 = calculateLocationScore2(location, latitude, longitude);
-    var score = (score1 + score2) / 2;
-    score = +score.toFixed(1);
-    var name = location.name;
+  if (!validQuery) {
+    res.status(httpStatus.NOT_FOUND).json({ suggestions: suggestions });
+    return;
+  }
 
-    if (score !== 0.0 && matchWithName(q, name)) {
-      location.score = score;
-      suggestions.push(location);
-    }
-  });
+  latitude = latitude ? +latitude : 0;
+  longitude = longitude ? +longitude : 0;
+
+  // Process queries
+  suggestions = chooseSuggestion(q, latitude, longitude, locations);
+
+  if (suggestions.length === 0) {
+    res.status(httpStatus.NOT_FOUND).json({ suggestions: suggestions });
+    return;
+  }
 
   suggestions.sort(sortInDescendingOrder);
-  res.json({
+
+  res.status(httpStatus.OK).json({
     suggestions: suggestions,
   });
 };

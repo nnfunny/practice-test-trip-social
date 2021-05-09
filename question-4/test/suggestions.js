@@ -31,7 +31,7 @@ describe('GET /suggestions', function() {
 
     before(function (done) {
       request
-        .get('/suggestions?q=Montreal')
+        .get('/suggestions?q=Montréal')
         .end(function (err, res) {
           response = res;
           response.json = JSON.parse(res.text);
@@ -66,14 +66,10 @@ describe('GET /suggestions', function() {
       });
     });
     
-    it('is a gratuitously failing test you should remove to prove you ran the tests', function () {	
-      expect(true).to.equal(false);	
-    });	    
-
     it('contains a match', function () {
       expect(response.json.suggestions).to.satisfy(function (suggestions) {
         return suggestions.some(function (suggestion) {
-          return suggestion.name.test(/montreal/i);
+          return /montréal/i.test(suggestion.name);
         });
       })
     });

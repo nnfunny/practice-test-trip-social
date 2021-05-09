@@ -1,7 +1,7 @@
-const express = require("express");
-const suggestionController = require("../controllers/suggestion.controller");
+var express = require("express");
+var suggestionController = require("../controllers/suggestion.controller");
 
-const router = express.Router();
+var router = express.Router();
 
 router.route("/").get(suggestionController.get);
 

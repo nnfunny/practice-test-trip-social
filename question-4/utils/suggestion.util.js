@@ -1,5 +1,4 @@
 "use strict";
-
 var fs = require("fs");
 
 var constants = require("./constants"),
@@ -48,9 +47,9 @@ function calculateLocationScore(location, lat, lon) {
 function calculateLocationScore2(location, latitude, longitude) {
   var lat = Math.abs(location.latitude - latitude);
 
-  var _long = Math.abs(location.longitude - longitude);
+  var lng = Math.abs(location.longitude - longitude);
 
-  var score = 10 - (lat + _long) / 2;
+  var score = 10 - (lat + lng) / 2;
   score = score > 0 ? Math.round(score) / 10 : 0;
   return score;
 }
@@ -96,6 +95,30 @@ function sortInDescendingOrder(suggestion1, suggestion2) {
   return suggestion2.score - suggestion1.score;
 }
 
+function chooseSuggestion(q, latitude, longitude, locations) {
+  var suggestions = [];
+
+  locations.forEach(function (location) {
+    var score1 = calculateLocationScore(location, latitude, longitude);
+    var score2 = calculateLocationScore2(location, latitude, longitude);
+    var score = (score1 + score2) / 2;
+    score = +score.toFixed(1);
+    var name = location.name;
+
+    if (
+      (score >= 0.0 && score <= 1.0 && matchWithName(q, name)) ||
+      matchWithName(q, name) 
+    ) {
+      location.score = score;
+      location.latitude = "" + location.latitude;
+      location.longitude = "" + location.longitude;
+      suggestions.push(location);
+    }
+  });
+
+  return suggestions;
+}
+
 module.exports = {
   calculateDistanceFormLatLonInKm: calculateDistanceFormLatLonInKm,
   calculateLocationScore: calculateLocationScore,
@@ -103,4 +126,5 @@ module.exports = {
   extractLocations: extractLocations,
   matchWithName: matchWithName,
   sortInDescendingOrder: sortInDescendingOrder,
+  chooseSuggestion: chooseSuggestion,
 };
