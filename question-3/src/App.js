@@ -13,18 +13,20 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
     validateForm(submittedForm);
+
     console.log(submittedForm);
+    console.table(submittedForm);
   };
 
   return (
     <div className="container">
       {config && (
-        <form className="needs-validation" onSubmit={handleSubmit} novalidate>
+        <form className="needs-validation" onSubmit={handleSubmit}>
           {config.questions.map((question) => {
             const { title, fields } = question;
             return <Question key={title} title={title} fields={fields} />;
           })}
-          <button class="btn btn-primary" type="submit">
+          <button className="btn btn-primary" type="submit">
             Submit
           </button>
         </form>
