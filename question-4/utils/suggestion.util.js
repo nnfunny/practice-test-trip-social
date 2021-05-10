@@ -95,20 +95,34 @@ function sortInDescendingOrder(suggestion1, suggestion2) {
   return suggestion2.score - suggestion1.score;
 }
 
+function calculateScoreForName(q, name) {
+  var score = (q.length) / (name.length);
+
+  return score;
+}
+
 function chooseSuggestions(q, latitude, longitude, locations) {
   var suggestions = [];
 
   locations.forEach(function (location) {
     var score1 = calculateLocationScore(location, latitude, longitude);
     var score2 = calculateLocationScore2(location, latitude, longitude);
-    var score = (score1 + score2) / 2;
-    score = +score.toFixed(1);
     var name = location.name;
 
     if (
       (score >= 0.0 && score <= 1.0 && matchWithName(q, name)) ||
       matchWithName(q, name) 
     ) {
+      var score = 0.0;
+
+      if (!longitude || !latitude) {
+        score = calculateScoreForName(q, name);
+      } else {
+        score = (score1 + score2) / 2;
+      }
+
+
+      score = +score.toFixed(1);
       location.score = score;
       location.latitude = "" + location.latitude;
       location.longitude = "" + location.longitude;
