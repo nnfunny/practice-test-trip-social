@@ -95,7 +95,7 @@ function sortInDescendingOrder(suggestion1, suggestion2) {
   return suggestion2.score - suggestion1.score;
 }
 
-function chooseSuggestion(q, latitude, longitude, locations) {
+function chooseSuggestions(q, latitude, longitude, locations) {
   var suggestions = [];
 
   locations.forEach(function (location) {
@@ -126,5 +126,5 @@ module.exports = {
   extractLocations: extractLocations,
   matchWithName: matchWithName,
   sortInDescendingOrder: sortInDescendingOrder,
-  chooseSuggestion: chooseSuggestion,
+  chooseSuggestions: chooseSuggestions,
 };

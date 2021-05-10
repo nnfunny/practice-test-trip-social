@@ -1,6 +1,6 @@
 var suggestionUtil = require("../utils/suggestion.util"),
   extractLocations = suggestionUtil.extractLocations,
-  chooseSuggestion = suggestionUtil.chooseSuggestion,
+  chooseSuggestions = suggestionUtil.chooseSuggestions,
   sortInDescendingOrder = suggestionUtil.sortInDescendingOrder;
 var httpStatus = require("http-status");
 var path = require("path");
@@ -29,7 +29,7 @@ exports.get = function (req, res) {
   longitude = longitude ? +longitude : 0;
 
   // Process queries
-  suggestions = chooseSuggestion(q, latitude, longitude, locations);
+  suggestions = chooseSuggestions(q, latitude, longitude, locations);
 
   if (suggestions.length === 0) {
     res.status(httpStatus.NOT_FOUND).json({ suggestions: suggestions });
