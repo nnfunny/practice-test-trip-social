@@ -74,4 +74,73 @@ describe('GET /suggestions', function() {
       })
     });
   });
+
+  describe('with a invalid latitude', function () {
+    var response;
+
+    before(function (done) {
+      request
+        .get('/suggestions?q=Londo&latitude=abc&longitude=-79.4163')
+        .end(function (err, res) {
+          response = res;
+          response.json = JSON.parse(res.text);
+          done(err);
+        });
+    });
+
+    it('returns a 404', function () {
+      expect(response.statusCode).to.equal(404);
+    });
+
+    it('returns an empty array of suggestions', function () {
+      expect(response.json.suggestions).to.be.instanceof(Array);
+      expect(response.json.suggestions).to.have.length(0);
+    });
+  });
+
+  describe('with a invalid longitude', function () {
+    var response;
+
+    before(function (done) {
+      request
+        .get('/suggestions?q=Londo&latitude=43.70011&longitude=abc')
+        .end(function (err, res) {
+          response = res;
+          response.json = JSON.parse(res.text);
+          done(err);
+        });
+    });
+
+    it('returns a 404', function () {
+      expect(response.statusCode).to.equal(404);
+    });
+
+    it('returns an empty array of suggestions', function () {
+      expect(response.json.suggestions).to.be.instanceof(Array);
+      expect(response.json.suggestions).to.have.length(0);
+    });
+  })
+
+  describe('with no given city, latitude and longitude', function () {
+    var response;
+
+    before(function (done) {
+      request
+        .get('/suggestions')
+        .end(function (err, res) {
+          response = res;
+          response.json = JSON.parse(res.text);
+          done(err);
+        });
+    });
+
+    it('returns a 404', function () {
+      expect(response.statusCode).to.equal(404);
+    });
+
+    it('returns an empty array of suggestions', function () {
+      expect(response.json.suggestions).to.be.instanceof(Array);
+      expect(response.json.suggestions).to.have.length(0);
+    });
+  })
 });
