@@ -110,7 +110,7 @@ The above output can view via `docker logs`
 ``` 
 GET /suggestions?q=[city]&latitude=[latitude]&longitude=[longitude]
 ```
-__Request__
+__Request__ `GET`
 
 | Query     | Type   | Description          |
 |-----------|:------:|----------------------|
